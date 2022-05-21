@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+
+    <bean name="student" class="com.suhan.entity.Student" scope="singleton" init-method="init" destroy-method="destroy" depends-on="school">
+
+        <property name="name" value="小明"/>
+        <property name="school" ref="school"/>
+
+        <property name="map">
+
+            <map>
+                <entry key="语文" value="90"/>
+                <entry key="数学" value="100"/>
+                <entry key="英语" value="95"/>
+            </map>
+        </property>
+
+
+
+    </bean>
+
+
+    <bean name="school" class="com.suhan.entity.School">
+
+        <!--指定构造方法-->
+        <constructor-arg name="id" value="1"/>
+        <constructor-arg name="address" value="合肥"></constructor-arg>
+
+
+<!--        <property name="address" value="合肥经开区"/>-->
+        <property name="list">
+
+            <list>
+                <value type="java.lang.String">小明</value>
+                <value type="java.lang.String">小帅</value>
+                <value type="java.lang.String">小红</value>
+            </list>
+
+        </property>
+
+    </bean>
+
+
+    <!--注册aop bean-->
+    <bean name="aopTest" class="com.suhan.aop.AopTest"/>
+
+    <aop:config>
+        <aop:pointcut id="test" expression="execution(* com.suhan.entity.Student.test())"/>
+
+        <aop:aspect ref="aopTest">
+            <aop:before method="before" pointcut-ref="test"/>
+            <aop:after method="after" pointcut-ref="test"/>
+        </aop:aspect>
+
+    </aop:config>
+
+
+
+
+
+
+</beans>
